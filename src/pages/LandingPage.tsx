@@ -7,7 +7,7 @@ function LandingPage() {
   const navigate = useNavigate();
 
   function handleButtonClick() {
-    navigate("/registerpage");
+    navigate("/register");
   }
 
   const [recipes, setRecipes] = useState<ReceptDto[]>([]);
@@ -74,7 +74,7 @@ function LandingPage() {
           </p>
         </div>
         <img
-          src="/src/assets/pexels-ella-olsson-572949-1640775.jpg"
+          src="/src/assets/pexels-alexander-dummer-37646-1912868.jpg"
           alt="Delicious food"
           style={{
             width: "300px",
@@ -83,6 +83,15 @@ function LandingPage() {
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
           }}
         />
+        <div style={{ maxWidth: "600px", textAlign: "center" }}>
+          <h2>Enjoy More Time with Your Family</h2>
+          <p>
+            Our platform is designed to help you save time and focus on what
+            truly matters. Whether it's planning meals, organizing shopping
+            lists, or discovering new recipes, we make it easy for you to spend
+            quality time with your loved ones.
+          </p>
+        </div>
       </div>
 
       {/* Recipes Section */}
