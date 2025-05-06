@@ -1,4 +1,3 @@
-// src/pages/RegisterPage.tsx
 import { useState } from 'react';
 import { api } from '../Api/axios';
 import type { RegistrationRequestDto } from '../types/auth';
@@ -21,21 +20,22 @@ const RegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-
+        
         console.log("👉 Skickar data:", formData);
 
         const response = await api.post('/auth/register', formData);
 
-      console.log("✅ Svar från server:", response.data);
-      setMessage('Registration successful!');
-      setTimeout(() => navigate('/'), 2000); 
+        console.log("✅ Svar från server:", response.data);
+        setMessage('Registration successful!');
+        setTimeout(() => navigate('/'), 2000); 
+
     } catch (error: any) {
         console.error("❌ Registrering misslyckades:", error.response);
-      setMessage(error.response?.data || 'Registration failed');
+        setMessage(error.response?.data || 'Registration failed');
     }
-  };
+};
 
-  return (
+return (
     <div className="p-6 max-w-md mx-auto">
       <h2 className="text-xl font-bold mb-4">Register</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
