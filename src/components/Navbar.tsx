@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import './Navbar.css';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import "./Navbar.css";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,8 +16,8 @@ const Navbar: React.FC = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
@@ -25,19 +25,19 @@ const Navbar: React.FC = () => {
   }, [location]);
 
   return (
-    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+    <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
       <div className="navbar-container">
         {/* Logo */}
-        <Link to="/" className="navbar-logo">
+        <Link to="/LandingPage" className="navbar-logo">
           <span>Minimums</span>
         </Link>
 
         {/* Mobile Menu Button */}
-        <button 
-          className={`navbar-toggle ${isOpen ? 'active' : ''}`} 
+        <button
+          className={`navbar-toggle ${isOpen ? "active" : ""}`}
           onClick={() => setIsOpen(!isOpen)}
           aria-expanded={isOpen}
-          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
         >
           <span className="toggle-bar"></span>
           <span className="toggle-bar"></span>
@@ -45,28 +45,28 @@ const Navbar: React.FC = () => {
         </button>
 
         {/* Desktop Navigation */}
-        <div className={`navbar-links ${isOpen ? 'open' : ''}`}>
-          <Link 
-            to="/" 
-            className={location.pathname === '/' ? 'active' : ''}
+        <div className={`navbar-links ${isOpen ? "open" : ""}`}>
+          <Link
+            to="/LandingPage"
+            className={location.pathname === "/" ? "active" : ""}
           >
             Home
           </Link>
-          <Link 
-            to="/register" 
-            className={location.pathname === '/register' ? 'active' : ''}
+          <Link
+            to="/register"
+            className={location.pathname === "/register" ? "active" : ""}
           >
             Register
           </Link>
-          <Link 
-            to="/login" 
-            className={location.pathname === '/login' ? 'active' : ''}
+          <Link
+            to="/login"
+            className={location.pathname === "/login" ? "active" : ""}
           >
             Login
           </Link>
-          <Link 
-            to="/profile" 
-            className={location.pathname === '/profile' ? 'active' : ''}
+          <Link
+            to="/profile"
+            className={location.pathname === "/profile" ? "active" : ""}
           >
             My Profile
           </Link>
