@@ -65,8 +65,8 @@ const Navbar: React.FC = () => {
             Login
           </Link>
           <Link
-            to="/profile"
-            className={location.pathname === "/profile" ? "active" : ""}
+            to="/my-profile"
+            className={location.pathname === "/my-profile" ? "active" : ""}
           >
             My Profile
           </Link>
