@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const isLoggedIn = !!localStorage.getItem("token");
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 10);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -32,7 +35,7 @@ const Navbar: React.FC = () => {
           <span>Minimums</span>
         </Link>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Toggle Button */}
         <button
           className={`navbar-toggle ${isOpen ? "active" : ""}`}
           onClick={() => setIsOpen(!isOpen)}
@@ -44,32 +47,51 @@ const Navbar: React.FC = () => {
           <span className="toggle-bar"></span>
         </button>
 
-        {/* Desktop Navigation */}
+        {/* Navigation Links */}
         <div className={`navbar-links ${isOpen ? "open" : ""}`}>
           <Link
             to="/LandingPage"
-            className={location.pathname === "/" ? "active" : ""}
+            className={location.pathname === "/LandingPage" ? "active" : ""}
           >
             Home
           </Link>
-          <Link
-            to="/register"
-            className={location.pathname === "/register" ? "active" : ""}
-          >
-            Register
-          </Link>
-          <Link
-            to="/login"
-            className={location.pathname === "/login" ? "active" : ""}
-          >
-            Login
-          </Link>
-          <Link
-            to="/my-profile"
-            className={location.pathname === "/my-profile" ? "active" : ""}
-          >
-            My Profile
-          </Link>
+
+          {!isLoggedIn ? (
+            <>
+              <Link
+                to="/register"
+                className={location.pathname === "/register" ? "active" : ""}
+              >
+                Register
+              </Link>
+              <Link
+                to="/login"
+                className={location.pathname === "/login" ? "active" : ""}
+              >
+                Login
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/my-profile"
+                className={location.pathname === "/my-profile" ? "active" : ""}
+              >
+                My Profile
+              </Link>
+
+              <Link
+              to="#"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLogout();
+              }}
+              className={location.pathname === "/logout" ? "active" : ""}
+              >
+                Logout
+                </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>

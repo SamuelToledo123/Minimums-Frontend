@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { api } from '../Api/axios';
+import { api } from '../services/api';
 import './MyProfilePage.css';
 
 interface Child {
@@ -44,13 +44,13 @@ const MyProfilePage = () => {
   if (!profile) return <p>Kunde inte ladda profilen.</p>;
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Min Profil: {profile.name}</h1>
+    <div className="profile-container">
+      <h1 className="profile-title">Min Profil: {profile.name}</h1>
 
-      <section className="mb-6">
-        <h2 className="text-xl font-semibold">Barn</h2>
+      <section className="profile-section">
+        <h2>Barn</h2>
         {profile.children.length > 0 ? (
-          <ul className="list-disc pl-5">
+          <ul>
             {profile.children.map(child => (
               <li key={child.id}>
                 {child.name} ({child.age} år) – Allergier: {child.allergies || 'Inga'}
@@ -62,10 +62,10 @@ const MyProfilePage = () => {
         )}
       </section>
 
-      <section>
-        <h2 className="text-xl font-semibold">Måltidsplaner</h2>
+      <section className="profile-section">
+        <h2>Måltidsplaner</h2>
         {profile.mealPlans.length > 0 ? (
-          <ul className="list-disc pl-5">
+          <ul>
             {profile.mealPlans.map(meal => (
               <li key={meal.id}>
                 {meal.date} – {meal.mealType}

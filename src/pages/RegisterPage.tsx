@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { api } from '../Api/axios';
+import { api } from '../services/api';
 import type { RegistrationRequestDto } from '../types/auth';
 import { useNavigate } from 'react-router-dom';
 import './RegisterPage.css';

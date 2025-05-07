@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { api } from "../Api/axios";
+import { api } from '../services/api';
 import type { ReceptDto } from "../types/recept";
 
 function LandingPage() {

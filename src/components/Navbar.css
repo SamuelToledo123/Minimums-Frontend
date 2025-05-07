@@ -1,4 +1,3 @@
-/* Modern Navbar Styling */
 .navbar {
   position: fixed;
   top: 0;
@@ -93,7 +92,6 @@
   transform: scaleX(1);
 }
 
-/* Mobile Menu Toggle */
 .navbar-toggle {
   display: none;
   background: transparent;
@@ -112,7 +110,6 @@
   transition: all 0.3s ease;
 }
 
-/* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   .navbar {
     background-color: rgba(26, 32, 44, 0.95);
@@ -145,7 +142,6 @@
   }
 }
 
-/* Media Queries for Responsive Design */
 @media (max-width: 768px) {
   .navbar-links {
     position: fixed;
@@ -190,7 +186,6 @@
     transform: rotate(-45deg) translate(7px, -7px);
   }
   
-  /* Dark mode mobile styles */
   @media (prefers-color-scheme: dark) {
     .navbar-links {
       background-color: #1a202c;
