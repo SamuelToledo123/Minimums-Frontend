@@ -15,7 +15,6 @@ function App() {
         <Route path="/my-profile" element={<MyProfilePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/" element={<div>Welcome to Minimums!</div>} />
         <Route path="/LandingPage" element={<LandingPage />} />
         <Route path="/recipes/:id" element={<RecipeDetails />} />
         <Route path="AllRecipes" element={<AllRecipes />} />

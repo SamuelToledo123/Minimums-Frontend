@@ -29,4 +29,66 @@
   li {
     margin-bottom: 0.5rem;
   }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .section-header h2 {
+    margin: 0;
+  }
+  
+  .section-header button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .form input {
+    padding: 6px;
+    font-size: 1rem;
+  }
+  
+  .form button {
+    align-self: flex-start;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .form input {
+    padding: 6px;
+    font-size: 1rem;
+  }
+  
+  .form button {
+    align-self: flex-start;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  
   
