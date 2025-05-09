@@ -14,7 +14,6 @@ function App() {
         <Route path="/my-profile" element={<MyProfilePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/" element={<div>Welcome to Minimums!</div>} />
         <Route path="/LandingPage" element={<LandingPage />} />
       </Routes>
     </div>
