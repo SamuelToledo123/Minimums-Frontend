@@ -1,13 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { api } from '../services/api';
+import { api } from "../services/api";
 import type { ReceptDto } from "../types/recept";
+import "./LandingPage.css"; // Import your CSS file for styling
 
 function LandingPage() {
   const navigate = useNavigate();
 
   function handleButtonClick() {
     navigate("/register");
+  }
+  function handleButtonClickSeeAllRecipes() {
+    navigate("/AllRecipes");
   }
 
   const [recipes, setRecipes] = useState<ReceptDto[]>([]);
@@ -99,6 +103,11 @@ function LandingPage() {
         <h2 style={{ textAlign: "center" }}>
           Check Out Our Delicious Recipes Suiting For The Whole Family
         </h2>
+        <div style={{ textAlign: "center", margin: "20px 0" }}>
+          <button onClick={handleButtonClickSeeAllRecipes} className="button">
+            See More
+          </button>
+        </div>
         <div
           style={{
             display: "flex",
@@ -109,23 +118,11 @@ function LandingPage() {
         >
           {recipes.map((recipe) => (
             <div
-              key={recipe.name}
-              style={{
-                width: "300px",
-                backgroundColor: "#ffffff",
-                border: "1px solid #ddd",
-                borderRadius: "15px",
-                padding: "20px",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                transition: "transform 0.2s, box-shadow 0.2s",
-                cursor: "pointer",
+              key={recipe.id}
+              className="recipeBox"
+              onClick={() => {
+                navigate(`/recipes/${recipe.id}`);
               }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "scale(1.05)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "scale(1)")
-              }
             >
               <h3
                 style={{

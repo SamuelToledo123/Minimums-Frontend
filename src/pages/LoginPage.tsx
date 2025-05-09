@@ -1,17 +1,20 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { api } from '../services/api';
-import './Login.css';
-import { ArrowRight } from 'lucide-react';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { api } from "../services/api";
+import "./Login.css";
+import { ArrowRight } from "lucide-react";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
-  const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+  const [message, setMessage] = useState<{
+    text: string;
+    type: "success" | "error";
+  } | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,13 +27,16 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await api.post<{ token: string }>('/auth/login', formData);
+      const response = await api.post<{ token: string }>(
+        "/auth/login",
+        formData
+      );
       const token = response.data.token;
-      localStorage.setItem('token', token);
-      setMessage({ text: 'Inloggning lyckades!', type: 'success' });
-      setTimeout(() => navigate('/LandingPage'), 1500);
+      localStorage.setItem("token", token);
+      setMessage({ text: "Inloggning lyckades!", type: "success" });
+      setTimeout(() => navigate("/LandingPage"), 1500);
     } catch (error: any) {
-      setMessage({ text: 'Fel e-post eller lösenord.', type: 'error' });
+      setMessage({ text: "Fel e-post eller lösenord.", type: "error" });
     } finally {
       setLoading(false);
     }
@@ -70,19 +76,19 @@ const LoginPage = () => {
           </div>
 
           <button type="submit" className="submit-button" disabled={loading}>
-            {loading ? 'Loggar in...' : (
+            {loading ? (
+              "Loggar in..."
+            ) : (
               <>
                 Logga in
-                <ArrowRight size={18} style={{ marginLeft: '8px' }} />
+                <ArrowRight size={18} style={{ marginLeft: "8px" }} />
               </>
             )}
           </button>
         </form>
 
         {message && (
-          <div className={`message ${message.type}`}>
-            {message.text}
-          </div>
+          <div className={`message ${message.type}`}>{message.text}</div>
         )}
 
         <div className="login-footer">
