@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import LoginPage from "./pages/LoginPage";
 import LandingPage from "./pages/LandingPage";
 import MyProfilePage from "./pages/MyProfilePage";
+import './index.css';
 
 
 function App() {

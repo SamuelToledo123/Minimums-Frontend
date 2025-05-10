@@ -40,8 +40,8 @@ const LoginPage = () => {
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <h2 className="login-title">Välkommen tillbaka</h2>
-          <p className="login-subtitle">Logga in för att fortsätta</p>
+          <h2 className="login-title">Welcome back</h2>
+          <p className="login-subtitle">Log in to continue</p>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
@@ -49,31 +49,35 @@ const LoginPage = () => {
             <input
               type="email"
               name="email"
+              id="email"
               value={formData.email}
               onChange={handleChange}
               required
               placeholder=" "
             />
-            <label htmlFor="email">E-post</label>
+            <label htmlFor="email">Email</label>
           </div>
 
           <div className="form-group">
             <input
               type="password"
               name="password"
+              id="password"
               value={formData.password}
               onChange={handleChange}
               required
               placeholder=" "
             />
-            <label htmlFor="password">Lösenord</label>
+            <label htmlFor="password">Password</label>
           </div>
 
           <button type="submit" className="submit-button" disabled={loading}>
-            {loading ? 'Loggar in...' : (
+            {loading ? (
+              <span className="loading-text">Logging in<span className="dot-animation">...</span></span>
+            ) : (
               <>
-                Logga in
-                <ArrowRight size={18} style={{ marginLeft: '8px' }} />
+                Log in
+                <ArrowRight size={18} className="button-icon" />
               </>
             )}
           </button>
@@ -86,7 +90,7 @@ const LoginPage = () => {
         )}
 
         <div className="login-footer">
-          Har du inget konto? <a href="/register">Registrera dig</a>
+          Don't have an account? <a href="/register" className="register-link">Sign up</a>
         </div>
       </div>
     </div>

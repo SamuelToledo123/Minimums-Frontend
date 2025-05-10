@@ -12,7 +12,7 @@ const RegisterPage = () => {
     password: '',
   });
 
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState<{ text: string; type: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,10 +24,10 @@ const RegisterPage = () => {
     setIsLoading(true);
     try {
       const response = await api.post('/auth/register', formData);
-      setMessage('Registration successful!');
-      setTimeout(() => navigate('/'), 2000);
+      setMessage({ text: 'Registration successful!', type: 'success' });
+      setTimeout(() => navigate('/login'), 2000);
     } catch (error: any) {
-      setMessage(error.response?.data || 'Registration failed');
+      setMessage({ text: error.response?.data || 'Registration failed', type: 'error' });
     } finally {
       setIsLoading(false);
     }
@@ -36,7 +36,11 @@ const RegisterPage = () => {
   return (
     <div className="register-container">
       <div className="register-card">
-        <h2>Create Account</h2>
+        <div className="register-header">
+          <h2 className="register-title">Create account</h2>
+          <p className="register-subtitle">Join us today</p>
+        </div>
+        
         <form onSubmit={handleSubmit} className="register-form">
           <div className="form-group">
             <input
@@ -46,8 +50,9 @@ const RegisterPage = () => {
               value={formData.name}
               onChange={handleChange}
               required
+              placeholder=" "
             />
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">Full name</label>
           </div>
           
           <div className="form-group">
@@ -58,6 +63,7 @@ const RegisterPage = () => {
               value={formData.email}
               onChange={handleChange}
               required
+              placeholder=" "
             />
             <label htmlFor="email">Email</label>
           </div>
@@ -71,6 +77,7 @@ const RegisterPage = () => {
               onChange={handleChange}
               required
               minLength={6}
+              placeholder=" "
             />
             <label htmlFor="password">Password</label>
           </div>
@@ -80,15 +87,23 @@ const RegisterPage = () => {
             className={`submit-button ${isLoading ? 'loading' : ''}`}
             disabled={isLoading}
           >
-            {isLoading ? 'Creating Account...' : 'Create Account'}
+            {isLoading ? (
+              <span className="loading-text">Creating account<span className="dot-animation">...</span></span>
+            ) : (
+              'Create account'
+            )}
           </button>
         </form>
         
         {message && (
-          <div className={`message ${message.includes('successful') ? 'success' : 'error'}`}>
-            {message}
+          <div className={`message ${message.type}`}>
+            {message.text}
           </div>
         )}
+        
+        <div className="register-footer">
+          Already have an account? <a href="/" className="login-link">Log in</a>
+        </div>
       </div>
     </div>
   );
