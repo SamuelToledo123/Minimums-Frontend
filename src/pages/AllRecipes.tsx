@@ -33,9 +33,6 @@ function AllRecipes() {
     <div>
       {/* Recipes Section */}
       <div style={{ padding: "20px" }}>
-        <h2 style={{ textAlign: "center" }}>
-          Check Out Our Delicious Recipes Suiting For The Whole Family
-        </h2>
         <div style={{ textAlign: "center", margin: "20px 0" }}></div>
         <div
           style={{

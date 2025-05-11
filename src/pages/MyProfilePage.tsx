@@ -1,7 +1,16 @@
-import { useEffect, useState } from 'react';
-import { api } from '../services/api';
-import { Pencil, UserCircle, Calendar, AlertCircle, Plus, X, Check, Save } from 'lucide-react';
-import './MyProfilePage.css';
+import { useEffect, useState } from "react";
+import { api } from "../services/api";
+import {
+  Pencil,
+  UserCircle,
+  Calendar,
+  AlertCircle,
+  Plus,
+  X,
+  Check,
+  Save,
+} from "lucide-react";
+import "./MyProfilePage.css";
 
 interface Child {
   id: number;
@@ -22,6 +31,22 @@ interface MyProfile {
   mealPlans: MealPlan[];
 }
 
+interface Recipe {
+  id: number;
+  name: string;
+  instructions: string;
+  description: string;
+  fromAge: number;
+  toAge: number;
+}
+
+interface MealPlan {
+  id: number;
+  date: string;
+  mealType: string;
+  recipes: Recipe[]; // Add the recipes property
+}
+
 const MyProfilePage = () => {
   const [profile, setProfile] = useState<MyProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -34,19 +59,19 @@ const MyProfilePage = () => {
 
   const [newMeal, setNewMeal] = useState<Partial<MealPlan>>({});
   const [editMealId, setEditMealId] = useState<number | null>(null);
-  const [activeTab, setActiveTab] = useState<'children' | 'meals'>('children');
+  const [activeTab, setActiveTab] = useState<"children" | "meals">("children");
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await api.get<MyProfile>('/my-profile');
+        const res = await api.get<MyProfile>("/my-profile");
         setProfile({
           name: res.data.name,
           children: res.data.children ?? [],
           mealPlans: res.data.mealPlans ?? [],
         });
       } catch (err) {
-        console.error('Kunde inte hämta profil:', err);
+        console.error("Kunde inte hämta profil:", err);
       } finally {
         setLoading(false);
       }
@@ -54,7 +79,6 @@ const MyProfilePage = () => {
 
     fetchProfile();
   }, []);
-
 
   const handleSaveChild = async () => {
     if (!newChild.name || newChild.age === undefined) return;
@@ -64,29 +88,39 @@ const MyProfilePage = () => {
         const res = await api.put<Child>(`/child/${editChildId}`, {
           name: newChild.name,
           age: newChild.age,
-          allergies: newChild.allergies || '',
+          allergies: newChild.allergies || "",
         });
-        setProfile(prev => prev ? {
-          ...prev,
-          children: prev.children.map(c => c.id === editChildId ? res.data : c),
-        } : null);
+        setProfile((prev) =>
+          prev
+            ? {
+                ...prev,
+                children: prev.children.map((c) =>
+                  c.id === editChildId ? res.data : c
+                ),
+              }
+            : null
+        );
       } else {
-        const res = await api.post<Child>('/child', {
+        const res = await api.post<Child>("/child", {
           name: newChild.name,
           age: newChild.age,
-          allergies: newChild.allergies || '',
+          allergies: newChild.allergies || "",
         });
-        setProfile(prev => prev ? {
-          ...prev,
-          children: [...prev.children, res.data],
-        } : null);
+        setProfile((prev) =>
+          prev
+            ? {
+                ...prev,
+                children: [...prev.children, res.data],
+              }
+            : null
+        );
       }
 
       setNewChild({});
       setEditChildId(null);
       setShowChildForm(false);
     } catch (error) {
-      console.error('Kunde inte spara barn:', error);
+      console.error("Kunde inte spara barn:", error);
     }
   };
 
@@ -98,18 +132,20 @@ const MyProfilePage = () => {
 
   const handleDeleteChild = async (id: number) => {
     try {
-
       await api.delete(`/child/${id}`);
-      
-      setProfile(prev => prev ? {
-        ...prev,
-        children: prev.children.filter(child => child.id !== id),
-      } : null);
+
+      setProfile((prev) =>
+        prev
+          ? {
+              ...prev,
+              children: prev.children.filter((child) => child.id !== id),
+            }
+          : null
+      );
     } catch (err) {
-      console.error('Kunde inte ta bort barn:', err);
+      console.error("Kunde inte ta bort barn:", err);
     }
   };
-
 
   const handleSaveMealPlan = async () => {
     if (!newMeal.date || !newMeal.mealType) return;
@@ -120,27 +156,37 @@ const MyProfilePage = () => {
           date: newMeal.date,
           mealType: newMeal.mealType,
         });
-        setProfile(prev => prev ? {
-          ...prev,
-          mealPlans: prev.mealPlans.map(m => m.id === editMealId ? res.data : m),
-        } : null);
+        setProfile((prev) =>
+          prev
+            ? {
+                ...prev,
+                mealPlans: prev.mealPlans.map((m) =>
+                  m.id === editMealId ? res.data : m
+                ),
+              }
+            : null
+        );
       } else {
-        const res = await api.post<MealPlan>('/meal-plans', {
+        const res = await api.post<MealPlan>("/meal-plans", {
           date: newMeal.date,
           mealType: newMeal.mealType,
-          recipes: [], 
+          recipes: [],
         });
-        setProfile(prev => prev ? {
-          ...prev,
-          mealPlans: [...prev.mealPlans, res.data],
-        } : null);
+        setProfile((prev) =>
+          prev
+            ? {
+                ...prev,
+                mealPlans: [...prev.mealPlans, res.data],
+              }
+            : null
+        );
       }
 
       setNewMeal({});
       setEditMealId(null);
       setShowMealForm(false);
     } catch (error) {
-      console.error('Kunde inte spara måltidsplan:', error);
+      console.error("Kunde inte spara måltidsplan:", error);
     }
   };
 
@@ -153,13 +199,17 @@ const MyProfilePage = () => {
   const handleDeleteMealPlan = async (id: number) => {
     try {
       await api.delete(`/meal-plans/${id}`);
-      
-      setProfile(prev => prev ? {
-        ...prev,
-        mealPlans: prev.mealPlans.filter(meal => meal.id !== id),
-      } : null);
+
+      setProfile((prev) =>
+        prev
+          ? {
+              ...prev,
+              mealPlans: prev.mealPlans.filter((meal) => meal.id !== id),
+            }
+          : null
+      );
     } catch (err) {
-      console.error('Kunde inte ta bort måltidsplan:', err);
+      console.error("Kunde inte ta bort måltidsplan:", err);
     }
   };
 
@@ -168,10 +218,10 @@ const MyProfilePage = () => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
@@ -185,25 +235,25 @@ const MyProfilePage = () => {
       </div>
 
       <div className="profile-tabs">
-        <button 
-          className={`tab ${activeTab === 'children' ? 'active' : ''}`}
-          onClick={() => setActiveTab('children')}
+        <button
+          className={`tab ${activeTab === "children" ? "active" : ""}`}
+          onClick={() => setActiveTab("children")}
         >
           Children
         </button>
-        <button 
-          className={`tab ${activeTab === 'meals' ? 'active' : ''}`}
-          onClick={() => setActiveTab('meals')}
+        <button
+          className={`tab ${activeTab === "meals" ? "active" : ""}`}
+          onClick={() => setActiveTab("meals")}
         >
           Meal Plans
         </button>
       </div>
 
-      {activeTab === 'children' && (
+      {activeTab === "children" && (
         <div className="tab-content">
           <div className="section-header">
             <h2>Children</h2>
-            <button 
+            <button
               className="action-button"
               onClick={() => {
                 setShowChildForm(!showChildForm);
@@ -212,7 +262,7 @@ const MyProfilePage = () => {
               }}
             >
               {showChildForm ? <X size={16} /> : <Plus size={16} />}
-              {showChildForm ? 'Cancel' : 'Add Child'}
+              {showChildForm ? "Cancel" : "Add Child"}
             </button>
           </div>
 
@@ -225,36 +275,42 @@ const MyProfilePage = () => {
                     id="childName"
                     type="text"
                     placeholder="Child's name"
-                    value={newChild.name || ''}
-                    onChange={(e) => setNewChild({ ...newChild, name: e.target.value })}
+                    value={newChild.name || ""}
+                    onChange={(e) =>
+                      setNewChild({ ...newChild, name: e.target.value })
+                    }
                   />
                 </div>
-                
+
                 <div className="form-field">
                   <label htmlFor="childAge">Age</label>
                   <input
                     id="childAge"
                     type="number"
                     placeholder="Age"
-                    value={newChild.age || ''}
-                    onChange={(e) => setNewChild({ ...newChild, age: Number(e.target.value) })}
+                    value={newChild.age || ""}
+                    onChange={(e) =>
+                      setNewChild({ ...newChild, age: Number(e.target.value) })
+                    }
                   />
                 </div>
-                
+
                 <div className="form-field">
                   <label htmlFor="childAllergies">Allergies (optional)</label>
                   <input
                     id="childAllergies"
                     type="text"
                     placeholder="e.g., Nuts, Dairy"
-                    value={newChild.allergies || ''}
-                    onChange={(e) => setNewChild({ ...newChild, allergies: e.target.value })}
+                    value={newChild.allergies || ""}
+                    onChange={(e) =>
+                      setNewChild({ ...newChild, allergies: e.target.value })
+                    }
                   />
                 </div>
-                
+
                 <button className="save-button" onClick={handleSaveChild}>
                   <Save size={16} />
-                  {editChildId ? 'Update Child' : 'Save Child'}
+                  {editChildId ? "Update Child" : "Save Child"}
                 </button>
               </div>
             </div>
@@ -262,25 +318,33 @@ const MyProfilePage = () => {
 
           {profile.children.length > 0 ? (
             <div className="items-grid">
-              {profile.children.map(child => (
+              {profile.children.map((child) => (
                 <div key={child.id} className="item-card">
                   <div className="item-header">
                     <div className="item-title">{child.name}</div>
                     <div className="item-actions">
-                      <button className="item-action edit" onClick={() => handleEditChild(child)}>
+                      <button
+                        className="item-action edit"
+                        onClick={() => handleEditChild(child)}
+                      >
                         <Pencil size={14} />
                       </button>
-                      <button className="item-action delete" onClick={() => handleDeleteChild(child.id)}>
+                      <button
+                        className="item-action delete"
+                        onClick={() => handleDeleteChild(child.id)}
+                      >
                         <X size={14} />
                       </button>
                     </div>
                   </div>
                   <div className="item-details">
                     <div className="item-detail">
-                      <span className="detail-label">Age:</span> {child.age} years
+                      <span className="detail-label">Age:</span> {child.age}{" "}
+                      years
                     </div>
                     <div className="item-detail">
-                      <span className="detail-label">Allergies:</span> {child.allergies || 'None'}
+                      <span className="detail-label">Allergies:</span>{" "}
+                      {child.allergies || "None"}
                     </div>
                   </div>
                 </div>
@@ -292,7 +356,10 @@ const MyProfilePage = () => {
                 <UserCircle size={40} />
               </div>
               <p>No children added yet</p>
-              <button className="add-button" onClick={() => setShowChildForm(true)}>
+              <button
+                className="add-button"
+                onClick={() => setShowChildForm(true)}
+              >
                 <Plus size={16} />
                 Add first child
               </button>
@@ -301,21 +368,32 @@ const MyProfilePage = () => {
         </div>
       )}
 
-      {activeTab === 'meals' && (
+      {activeTab === "meals" && (
         <div className="tab-content">
           <div className="section-header">
             <h2>Meal Plans</h2>
-            <button 
-              className="action-button"
-              onClick={() => {
-                setShowMealForm(!showMealForm);
-                setEditMealId(null);
-                setNewMeal({});
-              }}
-            >
-              {showMealForm ? <X size={16} /> : <Plus size={16} />}
-              {showMealForm ? 'Cancel' : 'Add Meal Plan'}
-            </button>
+            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+              <button
+                className="action-button"
+                onClick={() => {
+                  setShowMealForm(!showMealForm);
+                  setEditMealId(null);
+                  setNewMeal({});
+                }}
+              >
+                {showMealForm ? <X size={16} /> : <Plus size={16} />}
+                {showMealForm ? "Cancel" : "Add Meal Plan"}
+              </button>
+              <button
+                className="action-button"
+                onClick={() =>
+                  (window.location.href = "http://localhost:5173/AllRecipes")
+                }
+              >
+                <Plus size={16} />
+                Add Recipes
+              </button>
+            </div>
           </div>
 
           {showMealForm && (
@@ -326,17 +404,21 @@ const MyProfilePage = () => {
                   <input
                     id="mealDate"
                     type="date"
-                    value={newMeal.date || ''}
-                    onChange={(e) => setNewMeal({ ...newMeal, date: e.target.value })}
+                    value={newMeal.date || ""}
+                    onChange={(e) =>
+                      setNewMeal({ ...newMeal, date: e.target.value })
+                    }
                   />
                 </div>
-                
+
                 <div className="form-field">
                   <label htmlFor="mealType">Meal Type</label>
                   <select
                     id="mealType"
-                    value={newMeal.mealType || ''}
-                    onChange={(e) => setNewMeal({ ...newMeal, mealType: e.target.value })}
+                    value={newMeal.mealType || ""}
+                    onChange={(e) =>
+                      setNewMeal({ ...newMeal, mealType: e.target.value })
+                    }
                   >
                     <option value="">Select meal type</option>
                     <option value="Breakfast">Breakfast</option>
@@ -345,10 +427,10 @@ const MyProfilePage = () => {
                     <option value="Snack">Snack</option>
                   </select>
                 </div>
-                
+
                 <button className="save-button" onClick={handleSaveMealPlan}>
                   <Save size={16} />
-                  {editMealId ? 'Update Meal Plan' : 'Save Meal Plan'}
+                  {editMealId ? "Update Meal Plan" : "Save Meal Plan"}
                 </button>
               </div>
             </div>
@@ -356,15 +438,21 @@ const MyProfilePage = () => {
 
           {profile.mealPlans.length > 0 ? (
             <div className="items-grid">
-              {profile.mealPlans.map(meal => (
+              {profile.mealPlans.map((meal) => (
                 <div key={meal.id} className="item-card">
                   <div className="item-header">
                     <div className="item-title">{meal.mealType}</div>
                     <div className="item-actions">
-                      <button className="item-action edit" onClick={() => handleEditMeal(meal)}>
+                      <button
+                        className="item-action edit"
+                        onClick={() => handleEditMeal(meal)}
+                      >
                         <Pencil size={14} />
                       </button>
-                      <button className="item-action delete" onClick={() => handleDeleteMealPlan(meal.id)}>
+                      <button
+                        className="item-action delete"
+                        onClick={() => handleDeleteMealPlan(meal.id)}
+                      >
                         <X size={14} />
                       </button>
                     </div>
@@ -374,7 +462,32 @@ const MyProfilePage = () => {
                       <Calendar size={14} className="detail-icon" />
                       {formatDate(meal.date)}
                     </div>
+                    {meal.recipes && meal.recipes.length > 0 && (
+                      <div className="item-detail">
+                        <strong>Recipe:</strong> {meal.recipes[0].name}
+                      </div>
+                    )}
                   </div>
+                  {meal.recipes && meal.recipes.length > 0 && (
+                    <button
+                      className="show-recipe-button"
+                      onClick={() =>
+                        (window.location.href = `/recipes/${meal.recipes[0].id}`)
+                      }
+                      style={{
+                        marginTop: "10px",
+                        padding: "5px 10px",
+                        fontSize: "14px",
+                        color: "#fff",
+                        backgroundColor: "#007bff",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Show Recipe
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -384,7 +497,10 @@ const MyProfilePage = () => {
                 <Calendar size={40} />
               </div>
               <p>No meal plans added yet</p>
-              <button className="add-button" onClick={() => setShowMealForm(true)}>
+              <button
+                className="add-button"
+                onClick={() => setShowMealForm(true)}
+              >
                 <Plus size={16} />
                 Add first meal plan
               </button>
