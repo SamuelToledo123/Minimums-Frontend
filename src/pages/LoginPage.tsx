@@ -36,7 +36,7 @@ const LoginPage = () => {
       setMessage({ text: "Inloggning lyckades!", type: "success" });
       setTimeout(() => navigate("/LandingPage"), 1500);
     } catch (error: any) {
-      setMessage({ text: "Fel e-post eller lösenord.", type: "error" });
+      setMessage({ text: "Fel e-post eller lÃ¶senord.", type: "error" });
     } finally {
       setLoading(false);
     }
@@ -55,12 +55,12 @@ const LoginPage = () => {
             <input
               type="email"
               name="email"
+              id="email"
               value={formData.email}
               onChange={handleChange}
               required
               placeholder=" "
             />
-            <label htmlFor="email">Email</label>
             <label htmlFor="email">Email</label>
           </div>
 
@@ -79,16 +79,11 @@ const LoginPage = () => {
 
           <button type="submit" className="submit-button" disabled={loading}>
             {loading ? (
-              "Loggar in..."
-            ) : (
-            {loading ? (
               <span className="loading-text">
                 Logging in<span className="dot-animation">...</span>
               </span>
             ) : (
               <>
-                Logga in
-                <ArrowRight size={18} style={{ marginLeft: "8px" }} />
                 Log in
                 <ArrowRight size={18} className="button-icon" />
               </>
