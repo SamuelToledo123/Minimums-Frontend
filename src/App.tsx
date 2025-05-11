@@ -6,6 +6,7 @@ import LandingPage from "./pages/LandingPage";
 import MyProfilePage from "./pages/MyProfilePage";
 import RecipeDetails from "./pages/RecipeDetails";
 import AllRecipes from "./pages/AllRecipes";
+import "./index.css";
 
 function App() {
   return (

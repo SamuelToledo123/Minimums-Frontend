@@ -23,6 +23,11 @@ function RecipeDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [showMealPlanCard, setShowMealPlanCard] = useState(false);
+  const [mealPlans, setMealPlans] = useState<{ id: number; name: string }[]>(
+    []
+  );
+
   useEffect(() => {
     if (id) {
       api
@@ -52,6 +57,32 @@ function RecipeDetails() {
   if (!recipe) {
     return <p>Recipe not found.</p>;
   }
+
+  const handleShowMealPlanCard = () => {
+    api
+      .get<{ id: number; name: string; mealType: string; date: string }[]>(
+        "/meal-plans"
+      )
+      .then((res) => {
+        setMealPlans(res.data);
+        setShowMealPlanCard(true);
+      })
+      .catch((err) => console.error("Failed to fetch meal plans:", err));
+  };
+
+  const handleAddToMealPlan = (mealPlanId: number) => {
+    if (recipe) {
+      api
+        .post(`/meal-plans/${mealPlanId}/recipes/${recipe.id}`)
+        .then(() => {
+          alert("Recipe added to meal plan!");
+          setShowMealPlanCard(false); // Close the card after adding
+        })
+        .catch((err) =>
+          console.error("Failed to add recipe to meal plan:", err)
+        );
+    }
+  };
 
   return (
     <div
@@ -93,7 +124,7 @@ function RecipeDetails() {
             borderRadius: "5px",
             cursor: "pointer",
           }}
-          onClick={() => alert("Added to Mealplan!")}
+          onClick={handleShowMealPlanCard}
         >
           Add to Mealplan
         </button>
@@ -170,6 +201,84 @@ function RecipeDetails() {
         </h2>
         <p style={{ fontSize: "18px", color: "#555" }}>{recipe.instructions}</p>
       </div>
+
+      {showMealPlanCard && (
+        <div
+          style={{
+            position: "fixed",
+            top: "27%",
+            left: "81%",
+            transform: "translate(-50%, -50%)",
+            width: "400px",
+            padding: "20px",
+            border: "1px solid #ddd",
+            borderRadius: "10px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            backgroundColor: "#fff",
+            zIndex: 1000,
+          }}
+        >
+          <h2 style={{ fontSize: "22px", color: "#333", marginBottom: "10px" }}>
+            Select a Meal Plan
+          </h2>
+          <ul style={{ listStyleType: "none", padding: "0", margin: "0" }}>
+            {mealPlans.map((mealPlan) => (
+              <li
+                key={mealPlan.id}
+                style={{
+                  fontSize: "18px",
+                  color: "#555",
+                  marginBottom: "10px",
+                  borderBottom: "1px solid #ddd",
+                  paddingBottom: "5px",
+                  cursor: "pointer",
+                }}
+              >
+                <div>
+                  <strong>Name:</strong> {mealPlan.name}
+                </div>
+                <div>
+                  <strong>Meal Type:</strong> {mealPlan.mealType}
+                </div>
+                <div>
+                  <strong>Date:</strong> {mealPlan.date}
+                </div>
+
+                <button
+                  style={{
+                    marginLeft: "10px",
+                    padding: "5px 10px",
+                    fontSize: "14px",
+                    color: "#fff",
+                    backgroundColor: "#007bff",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleAddToMealPlan(mealPlan.id)}
+                >
+                  Add to Mealplan
+                </button>
+              </li>
+            ))}
+          </ul>
+          <button
+            style={{
+              marginTop: "10px",
+              padding: "10px 15px",
+              fontSize: "16px",
+              color: "#fff",
+              backgroundColor: "#dc3545",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+            onClick={() => setShowMealPlanCard(false)}
+          >
+            Close
+          </button>
+        </div>
+      )}
     </div>
   );
 }

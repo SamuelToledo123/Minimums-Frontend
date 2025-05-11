@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../services/api';
+import { Pencil, UserCircle, Calendar, AlertCircle, Plus, X, Check, Save } from 'lucide-react';
 import './MyProfilePage.css';
 
 interface Child {
@@ -33,6 +34,7 @@ const MyProfilePage = () => {
 
   const [newMeal, setNewMeal] = useState<Partial<MealPlan>>({});
   const [editMealId, setEditMealId] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<'children' | 'meals'>('children');
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -150,10 +152,8 @@ const MyProfilePage = () => {
 
   const handleDeleteMealPlan = async (id: number) => {
     try {
-      // Ta bort måltidsplanen från backend
       await api.delete(`/meal-plans/${id}`);
       
-      // Uppdatera UI: Ta bort måltidsplanen från listan
       setProfile(prev => prev ? {
         ...prev,
         mealPlans: prev.mealPlans.filter(meal => meal.id !== id),
@@ -166,110 +166,232 @@ const MyProfilePage = () => {
   if (loading) return <p>Laddar profil...</p>;
   if (!profile) return <p>Kunde inte ladda profilen.</p>;
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
   return (
     <div className="profile-container">
-      <h1 className="profile-title">Min Profil: {profile.name}</h1>
-
-      {/* BARN SEKTION */}
-      <section className="profile-section">
-        <div className="section-header">
-          <h2>Barn</h2>
-          <button onClick={() => {
-            setShowChildForm(!showChildForm);
-            setEditChildId(null);
-            setNewChild({});
-          }}>
-            {showChildForm ? 'Avbryt' : 'Lägg till barn'}
-          </button>
+      <div className="profile-header">
+        <div className="profile-avatar">
+          <UserCircle size={40} className="avatar-icon" />
         </div>
+        <h1 className="profile-name">{profile.name}</h1>
+      </div>
 
-        {showChildForm && (
-          <div className="form">
-            <input
-              type="text"
-              placeholder="Namn"
-              value={newChild.name || ''}
-              onChange={(e) => setNewChild({ ...newChild, name: e.target.value })}
-            />
-            <input
-              type="number"
-              placeholder="Ålder"
-              value={newChild.age || ''}
-              onChange={(e) => setNewChild({ ...newChild, age: Number(e.target.value) })}
-            />
-            <input
-              type="text"
-              placeholder="Allergier"
-              value={newChild.allergies || ''}
-              onChange={(e) => setNewChild({ ...newChild, allergies: e.target.value })}
-            />
-            <button onClick={handleSaveChild}>
-              {editChildId ? 'Uppdatera barn' : 'Spara barn'}
+      <div className="profile-tabs">
+        <button 
+          className={`tab ${activeTab === 'children' ? 'active' : ''}`}
+          onClick={() => setActiveTab('children')}
+        >
+          Children
+        </button>
+        <button 
+          className={`tab ${activeTab === 'meals' ? 'active' : ''}`}
+          onClick={() => setActiveTab('meals')}
+        >
+          Meal Plans
+        </button>
+      </div>
+
+      {activeTab === 'children' && (
+        <div className="tab-content">
+          <div className="section-header">
+            <h2>Children</h2>
+            <button 
+              className="action-button"
+              onClick={() => {
+                setShowChildForm(!showChildForm);
+                setEditChildId(null);
+                setNewChild({});
+              }}
+            >
+              {showChildForm ? <X size={16} /> : <Plus size={16} />}
+              {showChildForm ? 'Cancel' : 'Add Child'}
             </button>
           </div>
-        )}
 
-        {profile.children.length > 0 ? (
-          <ul>
-            {profile.children.map(child => (
-              <li key={child.id}>
-                {child.name} ({child.age} år) – Allergier: {child.allergies || 'Inga'}
-                <button onClick={() => handleEditChild(child)}>✏️</button>
-                <button onClick={() => handleDeleteChild(child.id)}>🗑️</button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>Inga barn registrerade.</p>
-        )}
-      </section>
+          {showChildForm && (
+            <div className="form-card">
+              <div className="form">
+                <div className="form-field">
+                  <label htmlFor="childName">Name</label>
+                  <input
+                    id="childName"
+                    type="text"
+                    placeholder="Child's name"
+                    value={newChild.name || ''}
+                    onChange={(e) => setNewChild({ ...newChild, name: e.target.value })}
+                  />
+                </div>
+                
+                <div className="form-field">
+                  <label htmlFor="childAge">Age</label>
+                  <input
+                    id="childAge"
+                    type="number"
+                    placeholder="Age"
+                    value={newChild.age || ''}
+                    onChange={(e) => setNewChild({ ...newChild, age: Number(e.target.value) })}
+                  />
+                </div>
+                
+                <div className="form-field">
+                  <label htmlFor="childAllergies">Allergies (optional)</label>
+                  <input
+                    id="childAllergies"
+                    type="text"
+                    placeholder="e.g., Nuts, Dairy"
+                    value={newChild.allergies || ''}
+                    onChange={(e) => setNewChild({ ...newChild, allergies: e.target.value })}
+                  />
+                </div>
+                
+                <button className="save-button" onClick={handleSaveChild}>
+                  <Save size={16} />
+                  {editChildId ? 'Update Child' : 'Save Child'}
+                </button>
+              </div>
+            </div>
+          )}
 
-      {/* MÅLTIDSPLAN SEKTION */}
-      <section className="profile-section">
-        <div className="section-header">
-          <h2>Måltidsplaner</h2>
-          <button onClick={() => {
-            setShowMealForm(!showMealForm);
-            setEditMealId(null);
-            setNewMeal({});
-          }}>
-            {showMealForm ? 'Avbryt' : 'Lägg till måltidsplan'}
-          </button>
+          {profile.children.length > 0 ? (
+            <div className="items-grid">
+              {profile.children.map(child => (
+                <div key={child.id} className="item-card">
+                  <div className="item-header">
+                    <div className="item-title">{child.name}</div>
+                    <div className="item-actions">
+                      <button className="item-action edit" onClick={() => handleEditChild(child)}>
+                        <Pencil size={14} />
+                      </button>
+                      <button className="item-action delete" onClick={() => handleDeleteChild(child.id)}>
+                        <X size={14} />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="item-details">
+                    <div className="item-detail">
+                      <span className="detail-label">Age:</span> {child.age} years
+                    </div>
+                    <div className="item-detail">
+                      <span className="detail-label">Allergies:</span> {child.allergies || 'None'}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="empty-state">
+              <div className="empty-icon">
+                <UserCircle size={40} />
+              </div>
+              <p>No children added yet</p>
+              <button className="add-button" onClick={() => setShowChildForm(true)}>
+                <Plus size={16} />
+                Add first child
+              </button>
+            </div>
+          )}
         </div>
+      )}
 
-        {showMealForm && (
-          <div className="form">
-            <input
-              type="date"
-              value={newMeal.date || ''}
-              onChange={(e) => setNewMeal({ ...newMeal, date: e.target.value })}
-            />
-            <input
-              type="text"
-              placeholder="Typ av måltid"
-              value={newMeal.mealType || ''}
-              onChange={(e) => setNewMeal({ ...newMeal, mealType: e.target.value })}
-            />
-            <button onClick={handleSaveMealPlan}>
-              {editMealId ? 'Uppdatera måltidsplan' : 'Spara måltidsplan'}
+      {activeTab === 'meals' && (
+        <div className="tab-content">
+          <div className="section-header">
+            <h2>Meal Plans</h2>
+            <button 
+              className="action-button"
+              onClick={() => {
+                setShowMealForm(!showMealForm);
+                setEditMealId(null);
+                setNewMeal({});
+              }}
+            >
+              {showMealForm ? <X size={16} /> : <Plus size={16} />}
+              {showMealForm ? 'Cancel' : 'Add Meal Plan'}
             </button>
           </div>
-        )}
 
-        {profile.mealPlans.length > 0 ? (
-          <ul>
-            {profile.mealPlans.map(meal => (
-              <li key={meal.id}>
-                {meal.date} – {meal.mealType}
-                <button onClick={() => handleEditMeal(meal)}>✏️</button>
-                <button onClick={() => handleDeleteMealPlan(meal.id)}>🗑️</button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>Inga måltidsplaner.</p>
-        )}
-      </section>
+          {showMealForm && (
+            <div className="form-card">
+              <div className="form">
+                <div className="form-field">
+                  <label htmlFor="mealDate">Date</label>
+                  <input
+                    id="mealDate"
+                    type="date"
+                    value={newMeal.date || ''}
+                    onChange={(e) => setNewMeal({ ...newMeal, date: e.target.value })}
+                  />
+                </div>
+                
+                <div className="form-field">
+                  <label htmlFor="mealType">Meal Type</label>
+                  <select
+                    id="mealType"
+                    value={newMeal.mealType || ''}
+                    onChange={(e) => setNewMeal({ ...newMeal, mealType: e.target.value })}
+                  >
+                    <option value="">Select meal type</option>
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Lunch">Lunch</option>
+                    <option value="Dinner">Dinner</option>
+                    <option value="Snack">Snack</option>
+                  </select>
+                </div>
+                
+                <button className="save-button" onClick={handleSaveMealPlan}>
+                  <Save size={16} />
+                  {editMealId ? 'Update Meal Plan' : 'Save Meal Plan'}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {profile.mealPlans.length > 0 ? (
+            <div className="items-grid">
+              {profile.mealPlans.map(meal => (
+                <div key={meal.id} className="item-card">
+                  <div className="item-header">
+                    <div className="item-title">{meal.mealType}</div>
+                    <div className="item-actions">
+                      <button className="item-action edit" onClick={() => handleEditMeal(meal)}>
+                        <Pencil size={14} />
+                      </button>
+                      <button className="item-action delete" onClick={() => handleDeleteMealPlan(meal.id)}>
+                        <X size={14} />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="item-details">
+                    <div className="item-detail">
+                      <Calendar size={14} className="detail-icon" />
+                      {formatDate(meal.date)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="empty-state">
+              <div className="empty-icon">
+                <Calendar size={40} />
+              </div>
+              <p>No meal plans added yet</p>
+              <button className="add-button" onClick={() => setShowMealForm(true)}>
+                <Plus size={16} />
+                Add first meal plan
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
