@@ -5,7 +5,7 @@ import { api } from "../services/api";
 interface Ingredient {
   id: number;
   name: string;
-  quantity: number;
+  quantity: string;
 }
 interface RecipeWithIngredients {
   id: number;
