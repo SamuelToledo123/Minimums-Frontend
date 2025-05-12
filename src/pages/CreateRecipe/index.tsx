@@ -11,6 +11,7 @@ type IngredientDto = {
 
 type CreateReceptDto = {
   name: string;
+  instructions: string;
   description: string;
   fromAge: number;
   toAge: number;
@@ -22,6 +23,7 @@ function CreateRecipe() {
 
   const [form, setForm] = useState<CreateReceptDto>({
     name: "",
+    instructions: "",
     description: "",
     fromAge: 0,
     toAge: 0,
@@ -76,7 +78,7 @@ function CreateRecipe() {
     }
   };
 
-   return (
+  return (
     <form onSubmit={handleSubmit} className="recipe-form">
       <h2>Create New Recipe</h2>
 
@@ -95,6 +97,15 @@ function CreateRecipe() {
         name="description"
         placeholder="Enter recipe description"
         value={form.description}
+        onChange={handleChange}
+        required
+      />
+
+      <label className="form-label">Instructions</label>
+      <textarea
+        name="instructions"
+        placeholder="Enter step-by-step instructions"
+        value={form.instructions}
         onChange={handleChange}
         required
       />
