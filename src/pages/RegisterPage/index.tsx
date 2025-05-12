@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { api } from '../services/api';
-import type { RegistrationRequestDto } from '../types/auth';
+import { api } from '../../services/api';
+import type { RegistrationRequestDto } from '../../types/auth';
 import { useNavigate } from 'react-router-dom';
-import './RegisterPage.css';
+import './style.css';
 
 const RegisterPage = () => {
   const navigate = useNavigate();

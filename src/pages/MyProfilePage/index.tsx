@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api } from "../services/api";
+import { api } from "../../services/api";
 import {
   Pencil,
   UserCircle,
@@ -10,7 +10,7 @@ import {
   Check,
   Save,
 } from "lucide-react";
-import "./MyProfilePage.css";
+import "./style.css";
 
 interface Child {
   id: number;

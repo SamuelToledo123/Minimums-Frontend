@@ -79,6 +79,12 @@ const Navbar: React.FC = () => {
               >
                 My Profile
               </Link>
+              <Link
+              to="/recipes/create"
+              className={location.pathname === "/recipes/create" ? "active" : ""}
+              >
+                Create Recipe
+                </Link>
 
               <Link
               to="#"

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../services/api";
-import "./Login.css";
+import { api } from "../../services/api";
+import "./style.css";
 import { ArrowRight } from "lucide-react";
 
 const LoginPage = () => {
