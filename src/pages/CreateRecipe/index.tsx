@@ -6,7 +6,7 @@ import "./style.css";
 type IngredientDto = {
   id: number;
   name: string;
-  amount: string;
+  quantity: string;
 };
 
 type CreateReceptDto = {
@@ -46,9 +46,9 @@ function CreateRecipe() {
   const addIngredient = () => {
     if (ingredientName && ingredientAmount) {
       const newIngredient: IngredientDto = {
-        id: Date.now(), 
+        id: Date.now(),
         name: ingredientName,
-        amount: ingredientAmount,
+        quantity: ingredientAmount,
       };
 
       setForm((prev) => ({
@@ -155,7 +155,9 @@ function CreateRecipe() {
         <ul>
           {form.ingredients.map((ing) => (
             <li key={ing.id}>
-              <span>{ing.name} – {ing.amount}</span>
+              <span>
+                {ing.name} – {ing.quantity}
+              </span>
               <button type="button" onClick={() => removeIngredient(ing.id)}>
                 ❌
               </button>
