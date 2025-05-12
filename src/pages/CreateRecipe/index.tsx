@@ -72,7 +72,7 @@ function CreateRecipe() {
     e.preventDefault();
     try {
       await api.post("/recipes", form);
-      navigate("/recipes");
+      navigate("/Allrecipes");
     } catch (error) {
       console.error("Failed to create recipe:", error);
     }
