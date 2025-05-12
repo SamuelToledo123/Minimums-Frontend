@@ -46,7 +46,7 @@ function CreateRecipe() {
   const addIngredient = () => {
     if (ingredientName && ingredientAmount) {
       const newIngredient: IngredientDto = {
-        id: Date.now(), 
+        id: Date.now(),
         name: ingredientName,
         amount: ingredientAmount,
       };
@@ -71,7 +71,19 @@ function CreateRecipe() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await api.post("/recipes", form);
+      const payload = {
+        name: form.name,
+        description: form.description,
+        instructions: form.instructions,
+        fromAge: form.fromAge,
+        toAge: form.toAge,
+        ingredientsDtoList: form.ingredients.map(({ name, amount }) => ({
+          name,
+          quantity: amount,
+        })),
+      };
+
+      await api.post("/recipes", payload);
       navigate("/Allrecipes");
     } catch (error) {
       console.error("Failed to create recipe:", error);
