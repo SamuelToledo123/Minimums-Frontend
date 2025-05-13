@@ -4,6 +4,9 @@ export interface ReceptDto {
   description: string;
   fromAge: number;
   toAge: number;
+  prepTime: string;
+  cookTime: string;
+  difficulty: string;
 
   ingredients: {
     id: number;
