@@ -17,6 +17,7 @@
 .recipe-header {
   text-align: center;
   margin-bottom: 40px;
+   padding-top: 60px;
   position: relative;
 }
 
@@ -34,7 +35,8 @@
 }
 
 .btn-add-mealplan {
-  position: absolute;
+  position: static;
+  margin: 0 ;
   top: 0;
   right: 0;
   padding: 12px 24px;
