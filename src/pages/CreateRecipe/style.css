@@ -1,9 +1,9 @@
 .recipe-form {
+  min-height: 100vh;
   max-width: 800px;
-  margin: 0 auto;
+  margin: auto;
   padding: var(--space-6);
-  padding-top: 80px;
-  background-color: var(--color-neutral-50);
+  padding-top: 100px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   font-family: var(--font-family);
@@ -55,7 +55,6 @@
   outline: none;
 }
 
-/* Age range styles */
 .age-range-container {
   display: flex;
   align-items: center;
@@ -202,7 +201,6 @@
   margin-bottom: var(--space-2);
 }
 
-/* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -219,7 +217,6 @@
   }
 }
 
-/* Responsive styles */
 @media (max-width: 768px) {
   .recipe-form {
     padding: var(--space-4);

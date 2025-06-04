@@ -2,7 +2,7 @@
   max-width: 800px;
   margin: 0 auto;
   padding: var(--space-8);
-  background-color: var(--color-neutral-50);
+  box-shadow: var(--shadow-md);
   min-height: 100vh;
 }
 
